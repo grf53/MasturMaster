@@ -8,7 +8,6 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -19,13 +18,13 @@ public class MainActivity extends Activity implements SensorEventListener {
 	TextView tvAY = null;
 	TextView tvAZ = null;
 	// 방향 센서값을 출력하기 위한 TextView
-	TextView tvOX = null;
-	TextView tvOY = null;
-	TextView tvOZ = null;
+//	TextView tvOX = null;
+//	TextView tvOY = null;
+//	TextView tvOZ = null;
 	TextView tvTimes = null;
 	
 	int	Times = 0;
-	float[] pre = {0,0,0};
+	int[] pre = {0,0,0,0,0};
 	
 	 PowerManager mPm;
      WakeLock mWakeLock;
@@ -46,10 +45,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 		tvAX = (TextView) findViewById(R.id.tvAX);
 		tvAY = (TextView) findViewById(R.id.tvAY);
 		tvAZ = (TextView) findViewById(R.id.tvAZ);
-		tvOX = (TextView) findViewById(R.id.tvOX);
-		tvOY = (TextView) findViewById(R.id.tvOY);
-		tvOZ = (TextView) findViewById(R.id.tvOZ);
 		tvTimes = (TextView) findViewById(R.id.tvTimes);
+		
 		// SensorManager 인스턴스를 가져옴
 		sm = (SensorManager) getSystemService(SENSOR_SERVICE);
 		// 가속도 센서
@@ -86,26 +83,25 @@ public class MainActivity extends Activity implements SensorEventListener {
 		switch (event.sensor.getType()) {
 		case Sensor.TYPE_ACCELEROMETER:
 			tvAX.setText(String.valueOf(event.values[0]));
-			Log.d("accX",String.valueOf(event.values[0]));
 			tvAY.setText(String.valueOf(event.values[1]));
-			Log.d("accY",String.valueOf(event.values[1]));
 			tvAZ.setText(String.valueOf(event.values[2]));
-			Log.d("accZ",String.valueOf(event.values[2]));
 			pre[0] = pre[1];
 			pre[1] = pre[2];
-			pre[2] = (float) Math.sqrt(event.values[0]*event.values[0]+event.values[1]*event.values[1]+event.values[2]*event.values[2]);
-
-			Log.d("gasokdo", ""+pre[1]);
-			if(pre[1]>20.0 && pre[0] < pre[1] && pre[1]>pre[2]){
+			pre[2] = pre[3];
+			pre[3] = pre[4];
+			pre[4] = (int) Math.sqrt(event.values[0]*event.values[0]+event.values[1]*event.values[1]+event.values[2]*event.values[2]);
+					
+			if(pre[0]<pre[1] && pre[1]<pre[2] && pre[2]>pre[3] && pre[3]>pre[4]){
+//				Log.d("gasokdo", ""+pre[1]);
 				Times++;
-				tvTimes.setText(Times+" times");
+				tvTimes.setText((Times/2)+" times");
 			}
 			break;
-		case Sensor.TYPE_GYROSCOPE:
-			tvOX.setText(String.valueOf(event.values[0]));
-			tvOY.setText(String.valueOf(event.values[1]));
-			tvOZ.setText(String.valueOf(event.values[2]));
-			break;
+//		case Sensor.TYPE_GYROSCOPE:
+//			tvOX.setText(String.valueOf(event.values[0]));
+//			tvOY.setText(String.valueOf(event.values[1]));
+//			tvOZ.setText(String.valueOf(event.values[2]));
+//			break;
 		}
 	}
 
