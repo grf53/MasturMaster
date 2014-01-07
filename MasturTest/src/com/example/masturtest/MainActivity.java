@@ -15,9 +15,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements SensorEventListener, OnClickListener {
+public class MainActivity extends Activity {
 
-	// 가속도 센서값을 출력하기 위한 TextView
 	TextView tvAX = null;
 	TextView tvAY = null;
 	TextView tvAZ = null;
@@ -25,19 +24,18 @@ public class MainActivity extends Activity implements SensorEventListener, OnCli
 	TextView tvTime = null;
 	TextView tvDPM = null;
 	Button btnMeasure = null;
-		
-	int	Times = 0;
-	int[] pastAccel = {0,0,0,0,0};
+
+	int Times = 0;
+	int[] pastAccel = { 0, 0, 0, 0, 0 };
 	long pastTime = 0, presentTime = 0;
-	
-	 PowerManager mPm;
-     WakeLock mWakeLock;
-	
-	// 센서 관리자
+
+	PowerManager mPm;
+	WakeLock mWakeLock;
+
 	SensorManager sm = null;
-	// 가속도 센서
 	Sensor accSensor = null;
-	
+	SensorEventListener sel = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,83 +49,83 @@ public class MainActivity extends Activity implements SensorEventListener, OnCli
 		tvTime = (TextView) findViewById(R.id.tvTime);
 		tvDPM = (TextView) findViewById(R.id.tvDPM);
 		btnMeasure = (Button) findViewById(R.id.btnMeasure);
-		
-		// SensorManager 인스턴스를 가져옴
+
 		sm = (SensorManager) getSystemService(SENSOR_SERVICE);
-		// 가속도 센서
 		accSensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		sel = new SensorEventListener() {
+			@Override
+			public void onAccuracyChanged(Sensor sensor, int accuracy) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onSensorChanged(SensorEvent event) {
+				// switch (event.sensor.getType()) {
+				// case Sensor.TYPE_ACCELEROMETER:
+				tvAX.setText(String.valueOf(event.values[0]));
+				tvAY.setText(String.valueOf(event.values[1]));
+				tvAZ.setText(String.valueOf(event.values[2]));
+				pastAccel[0] = pastAccel[1];
+				pastAccel[1] = pastAccel[2];
+				pastAccel[2] = pastAccel[3];
+				pastAccel[3] = pastAccel[4];
+				pastAccel[4] = (int) Math.sqrt(event.values[0]
+						* event.values[0] + event.values[1] * event.values[1]
+						+ event.values[2] * event.values[2]);
+
+				Log.d("gasokdo", "" + pastAccel[2]);
+				presentTime = System.currentTimeMillis();
+				tvTime.setText((presentTime - pastTime) / 1000 + "."
+						+ (presentTime - pastTime) % 1000 + " s");
+				tvDPM.setText(String
+						.format("%.3f",
+								(60000 * (Times / 2) / ((double) (presentTime - pastTime))))
+						+ " 딸/min");
+
+				if (pastAccel[0] < pastAccel[1] && pastAccel[1] < pastAccel[2]
+						&& pastAccel[2] > pastAccel[3]
+						&& pastAccel[3] > pastAccel[4]) {
+					Log.d("_Times", "" + Times);
+					Times++;
+					tvTimes.setText((Times / 2) + " times");
+				}
+
+				if (presentTime - pastTime > 30000) {
+					measureComplete();
+				}
+
+				// break;
+				// }
+			}
+		};
+
 	}
-	
+
+	public void measureComplete() {
+		btnMeasure.setEnabled(true);
+		sm.unregisterListener(sel);
+	}
+
 	@Override
 	public void onResume() {
 		super.onResume();
-		//measure();
-		btnMeasure.setOnClickListener(this);
+		// measure();
+		btnMeasure.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				pastTime = System.currentTimeMillis();
+				Times = 0;
+				sm.registerListener(sel, accSensor,
+						SensorManager.SENSOR_DELAY_GAME);
+				btnMeasure.setEnabled(false);
+			}
+		});
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		// 센서에서 이벤트 리스너 분리
-		sm.unregisterListener(this);
-	}
-
-	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onSensorChanged(SensorEvent event) {	
-		switch (event.sensor.getType()) {
-		case Sensor.TYPE_ACCELEROMETER:
-			tvAX.setText(String.valueOf(event.values[0]));
-			tvAY.setText(String.valueOf(event.values[1]));
-			tvAZ.setText(String.valueOf(event.values[2]));
-			pastAccel[0] = pastAccel[1];
-			pastAccel[1] = pastAccel[2];
-			pastAccel[2] = pastAccel[3];
-			pastAccel[3] = pastAccel[4];
-			pastAccel[4] = (int) Math.sqrt(event.values[0]*event.values[0]+event.values[1]*event.values[1]+event.values[2]*event.values[2]);
-			
-			Log.d("gasokdo", ""+pastAccel[2]);
-			presentTime = System.currentTimeMillis();
-			tvTime.setText((presentTime - pastTime)/1000+"."+(presentTime - pastTime)%1000+" s");
-			tvDPM.setText(String.format("%.3f", (60000*(Times/2)/((double)(presentTime - pastTime))))+" 딸/min");
-			
-			if(pastAccel[0]<pastAccel[1] && pastAccel[1]<pastAccel[2] && pastAccel[2]>pastAccel[3] && pastAccel[3]>pastAccel[4]){
-				Log.d("_Times", ""+Times);
-				Times++;
-				tvTimes.setText((Times/2)+" times");				
-			}
-			
-			if(presentTime - pastTime > 30000)
-			{
-				measureComplete();
-			}
-			
-			break;
-		}
-	}
-	
-	public void onClick(View v)
-	{
-		switch (v.getId()) {
-		case R.id.btnMeasure:
-			pastTime = System.currentTimeMillis();
-			Times = 0;
-			// 가속도 센서 리스너 오브젝트를 등록
-			sm.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_GAME);
-			btnMeasure.setEnabled(false);
-			break;
-		}
-	}
-	
-	public void measureComplete()
-	{
-		btnMeasure.setEnabled(true);
-		// 센서에서 이벤트 리스너 분리
-		sm.unregisterListener(this);
+		sm.unregisterListener(sel);
 	}
 }
