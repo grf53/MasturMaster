@@ -1,6 +1,7 @@
 package com.example.masturtest;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -28,6 +29,7 @@ public class MainActivity extends Activity {
 	int Times = 0;
 	int[] pastAccel = { 0, 0, 0, 0, 0 };
 	long pastTime = 0, presentTime = 0;
+	int limitTime = 0;
 
 	PowerManager mPm;
 	WakeLock mWakeLock;
@@ -42,6 +44,8 @@ public class MainActivity extends Activity {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		setContentView(R.layout.activity_main);
 
+		Intent intent = getIntent();
+		
 		tvAX = (TextView) findViewById(R.id.tvAX);
 		tvAY = (TextView) findViewById(R.id.tvAY);
 		tvAZ = (TextView) findViewById(R.id.tvAZ);
@@ -49,6 +53,8 @@ public class MainActivity extends Activity {
 		tvTime = (TextView) findViewById(R.id.tvTime);
 		tvDPM = (TextView) findViewById(R.id.tvDPM);
 		btnMeasure = (Button) findViewById(R.id.btnMeasure);
+		
+		limitTime = intent.getExtras().getInt("eTime");
 
 		sm = (SensorManager) getSystemService(SENSOR_SERVICE);
 		accSensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -91,7 +97,7 @@ public class MainActivity extends Activity {
 					tvTimes.setText((Times / 2) + " times");
 				}
 
-				if (presentTime - pastTime > 30000) {
+				if (presentTime - pastTime >= limitTime) {
 					measureComplete();
 				}
 

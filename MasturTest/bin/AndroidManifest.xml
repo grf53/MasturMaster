@@ -13,9 +13,11 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
+        <!-- MainActivity -->>
         <activity
-            android:name="com.example.masturtest.MainActivity"
-            android:label="@string/app_name" 
+            android:name="com.example.masturtest.choiceActivity"
+            android:label="choiceView" 
             android:screenOrientation="portrait">
             
             <intent-filter>
@@ -24,6 +26,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <!-- choiceActivity  -->
+        <activity
+         android:name="com.example.masturtest.MainActivity"
+         android:label="@string/app_name"
+        />
+        
     </application>
 
 </manifest>
