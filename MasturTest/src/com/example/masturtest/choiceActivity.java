@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class choiceActivity extends Activity {
+public class ChoiceActivity extends Activity {
 
 	Button btn1 = null;
 	Button btn2 = null;
@@ -16,7 +16,7 @@ public class choiceActivity extends Activity {
 	int choice = 0;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_choice);
@@ -28,7 +28,7 @@ public class choiceActivity extends Activity {
 	}
 	
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
 		
@@ -36,7 +36,7 @@ public class choiceActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(choiceActivity.this, MainActivity.class);
+				Intent intent = new Intent(ChoiceActivity.this, GameActivity.class);
 				intent.putExtra("eTime", 10000);
 				startActivity(intent);
 			}
@@ -46,7 +46,7 @@ public class choiceActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(choiceActivity.this, MainActivity.class);
+				Intent intent = new Intent(ChoiceActivity.this, GameActivity.class);
 				intent.putExtra("eTime", 30000);
 				startActivity(intent);
 			}
@@ -56,7 +56,7 @@ public class choiceActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(choiceActivity.this, MainActivity.class);
+				Intent intent = new Intent(ChoiceActivity.this, GameActivity.class);
 				intent.putExtra("eTime", 120000);
 				startActivity(intent);
 			}
@@ -64,7 +64,7 @@ public class choiceActivity extends Activity {
 	}
 	
 	@Override
-	protected void onPause() {
+	public void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
 	}

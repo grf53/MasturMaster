@@ -16,7 +16,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class GameActivity extends Activity {
 
 	TextView tvAX = null;
 	TextView tvAY = null;
@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		setContentView(R.layout.activity_main);
 
-		//Intent intent = getIntent();
+		Intent intent = getIntent();
 		
 		tvAX = (TextView) findViewById(R.id.tvAX);
 		tvAY = (TextView) findViewById(R.id.tvAY);
@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
 		tvDPM = (TextView) findViewById(R.id.tvDPM);
 		btnMeasure = (Button) findViewById(R.id.btnMeasure);
 		
-		limitTime = 10000;//intent.getExtras().getInt("eTime");
+		limitTime = intent.getExtras().getInt("eTime");
 
 		sm = (SensorManager) getSystemService(SENSOR_SERVICE);
 		accSensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -67,8 +67,6 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onSensorChanged(SensorEvent event) {
-				// switch (event.sensor.getType()) {
-				// case Sensor.TYPE_ACCELEROMETER:
 				tvAX.setText(String.valueOf(event.values[0]));
 				tvAY.setText(String.valueOf(event.values[1]));
 				tvAZ.setText(String.valueOf(event.values[2]));
@@ -82,16 +80,10 @@ public class MainActivity extends Activity {
 
 				Log.d("gasokdo", "" + pastAccel[2]);
 				presentTime = System.currentTimeMillis();
-				tvTime.setText((presentTime - pastTime) / 1000 + "."
-						+ (presentTime - pastTime) % 1000 + " s");
-				tvDPM.setText(String
-						.format("%.3f",
-								(60000 * (Times / 2) / ((double) (presentTime - pastTime))))
-						+ " 딸/min");
+				tvTime.setText((presentTime - pastTime) / 1000 + "." + (presentTime - pastTime) % 1000 + " s");
+				tvDPM.setText(String.format("%.3f", (60000 * (Times / 2) / ((double) (presentTime - pastTime)))) + " 딸/min");
 
-				if (pastAccel[0] < pastAccel[1] && pastAccel[1] < pastAccel[2]
-						&& pastAccel[2] > pastAccel[3]
-						&& pastAccel[3] > pastAccel[4]) {
+				if (pastAccel[0] < pastAccel[1] && pastAccel[1] < pastAccel[2] && pastAccel[2] > pastAccel[3] && pastAccel[3] > pastAccel[4]) {
 					Log.d("_Times", "" + Times);
 					Times++;
 					tvTimes.setText((Times / 2) + " times");
@@ -100,15 +92,12 @@ public class MainActivity extends Activity {
 				if (presentTime - pastTime >= limitTime) {
 					measureComplete();
 				}
-
-				// break;
-				// }
 			}
 		};
 
 	}
 
-	public void measureComplete() {
+	private void measureComplete() {
 		btnMeasure.setEnabled(true);
 		sm.unregisterListener(sel);
 	}
@@ -116,7 +105,6 @@ public class MainActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		// measure();
 		btnMeasure.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -125,6 +113,7 @@ public class MainActivity extends Activity {
 				sm.registerListener(sel, accSensor,
 						SensorManager.SENSOR_DELAY_GAME);
 				btnMeasure.setEnabled(false);
+				tvTimes.setText("0 times");
 			}
 		});
 	}
