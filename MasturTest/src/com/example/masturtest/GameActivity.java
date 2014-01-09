@@ -1,6 +1,7 @@
 package com.example.masturtest;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -9,7 +10,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.util.Log;
+import android.os.Vibrator;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 
 public class GameActivity extends Activity {
 
+	static boolean nowMeasuring = false;
+	
 	TextView tvAX = null;
 	TextView tvAY = null;
 	TextView tvAZ = null;
@@ -30,14 +33,17 @@ public class GameActivity extends Activity {
 	int[] pastAccel = { 0, 0, 0, 0, 0 };
 	long pastTime = 0, presentTime = 0;
 	int limitTime = 0;
+	String strDPM = "";
 
 	PowerManager mPm;
 	WakeLock mWakeLock;
 
 	SensorManager sm = null;
 	Sensor accSensor = null;
-	SensorEventListener sel = null;
+	SensorListener sel = null;
 
+	TimeCheckThread tct;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,62 +64,49 @@ public class GameActivity extends Activity {
 
 		sm = (SensorManager) getSystemService(SENSOR_SERVICE);
 		accSensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		sel = new SensorEventListener() {
-			@Override
-			public void onAccuracyChanged(Sensor sensor, int accuracy) {
-				// TODO Auto-generated method stub
+		sel = new SensorListener();
 
-			}
-
-			@Override
-			public void onSensorChanged(SensorEvent event) {
-				tvAX.setText(String.valueOf(event.values[0]));
-				tvAY.setText(String.valueOf(event.values[1]));
-				tvAZ.setText(String.valueOf(event.values[2]));
-				pastAccel[0] = pastAccel[1];
-				pastAccel[1] = pastAccel[2];
-				pastAccel[2] = pastAccel[3];
-				pastAccel[3] = pastAccel[4];
-				pastAccel[4] = (int) Math.sqrt(event.values[0]
-						* event.values[0] + event.values[1] * event.values[1]
-						+ event.values[2] * event.values[2]);
-
-				Log.d("gasokdo", "" + pastAccel[2]);
-				presentTime = System.currentTimeMillis();
-				tvTime.setText((presentTime - pastTime) / 1000 + "." + (presentTime - pastTime) % 1000 + " s");
-				tvDPM.setText(String.format("%.3f", (60000 * (Times / 2) / ((double) (presentTime - pastTime)))) + " 딸/min");
-
-				if (pastAccel[0] < pastAccel[1] && pastAccel[1] < pastAccel[2] && pastAccel[2] > pastAccel[3] && pastAccel[3] > pastAccel[4]) {
-					Log.d("_Times", "" + Times);
-					Times++;
-					tvTimes.setText((Times / 2) + " times");
-				}
-
-				if (presentTime - pastTime >= limitTime) {
-					measureComplete();
-				}
-			}
-		};
-
-	}
-
-	private void measureComplete() {
-		btnMeasure.setEnabled(true);
-		sm.unregisterListener(sel);
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
 		btnMeasure.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				pastTime = System.currentTimeMillis();
+				
 				Times = 0;
-				sm.registerListener(sel, accSensor,
-						SensorManager.SENSOR_DELAY_GAME);
 				btnMeasure.setEnabled(false);
 				tvTimes.setText("0 times");
+				
+				sm.registerListener(sel, accSensor,
+						SensorManager.SENSOR_DELAY_GAME);
+				
+				tct = new TimeCheckThread(limitTime);
+				
+				nowMeasuring = true;
+				
+				tct.execute();
+			}
+		});
+		
+		tct = new TimeCheckThread(limitTime);
+	}
+
+	private void measureComplete() {
+		
+		Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		
+		btnMeasure.setEnabled(true);
+		btnMeasure.setText("다음으로");
+		sm.unregisterListener(sel);
+		
+		vib.vibrate(1000);
+		
+		btnMeasure.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+				Intent tempIntent = new Intent(GameActivity.this, ResultActivity.class);
+				
+				tempIntent.putExtra("ddrpm", strDPM);
+				startActivity(tempIntent);
+				finish();
 			}
 		});
 	}
@@ -121,6 +114,64 @@ public class GameActivity extends Activity {
 	@Override
 	public void onPause() {
 		super.onPause();
-		sm.unregisterListener(sel);
+
+		if(nowMeasuring)
+			sm.unregisterListener(sel);
+	}
+	
+	public void onResume() {
+		super.onResume();
+		
+		if(nowMeasuring)
+			tct.execute();
+	}
+	
+	class SensorListener implements SensorEventListener {
+
+		@Override
+		public void onAccuracyChanged(Sensor sensor, int accuracy) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSensorChanged(SensorEvent event) {
+			// TODO Auto-generated method stub	
+			tvAX.setText(String.valueOf(event.values[0]));
+			tvAY.setText(String.valueOf(event.values[1]));
+			tvAZ.setText(String.valueOf(event.values[2]));
+			pastAccel[0] = pastAccel[1];
+			pastAccel[1] = pastAccel[2];
+			pastAccel[2] = pastAccel[3];
+			pastAccel[3] = pastAccel[4];
+			pastAccel[4] = (int) Math.sqrt(event.values[0] * event.values[0] + event.values[1] * event.values[1] + event.values[2] * event.values[2]);
+						
+			tvTime.setText(tct.getTime() / 1000 + "." + getStringTime(tct.getTime() % 1000) + " s");
+			tvDPM.setText(String.format("%.3f", (60000 * (Times / 2) / ((double) tct.getTime()))) + " 딸/min");
+
+			if (pastAccel[0] < pastAccel[1] && pastAccel[1] < pastAccel[2] && pastAccel[2] > pastAccel[3] && pastAccel[3] > pastAccel[4]) {
+			
+				Times++;
+				tvTimes.setText((Times / 2) + " times");
+			}
+			
+			if(!nowMeasuring)
+			{
+				strDPM = (String) tvDPM.getText();
+				measureComplete();
+			}
+		}
+		
+		String getStringTime(long time) {
+			
+			if(time > 99)
+				return String.valueOf(time);
+			else if(time > 9)
+				return "0" + String.valueOf(time);
+			else if(time > 0)
+				return "00" + String.valueOf(time);
+			else
+				return "000";
+		}
 	}
 }

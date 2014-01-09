@@ -25,13 +25,6 @@ public class ChoiceActivity extends Activity {
 		btn2 = (Button) findViewById(R.id.btn1);
 		btn3 = (Button) findViewById(R.id.btn2);
 		
-	}
-	
-	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		
 		btn1.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -39,6 +32,7 @@ public class ChoiceActivity extends Activity {
 				Intent intent = new Intent(ChoiceActivity.this, GameActivity.class);
 				intent.putExtra("eTime", 10000);
 				startActivity(intent);
+				finish();
 			}
 		});
 		
@@ -49,6 +43,7 @@ public class ChoiceActivity extends Activity {
 				Intent intent = new Intent(ChoiceActivity.this, GameActivity.class);
 				intent.putExtra("eTime", 30000);
 				startActivity(intent);
+				finish();
 			}
 		});
 		
@@ -59,8 +54,16 @@ public class ChoiceActivity extends Activity {
 				Intent intent = new Intent(ChoiceActivity.this, GameActivity.class);
 				intent.putExtra("eTime", 120000);
 				startActivity(intent);
+				finish();
 			}
 		});
+	}
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
 	}
 	
 	@Override
