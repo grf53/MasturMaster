@@ -1,19 +1,75 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-    
-    <TextView 
-        android:id="@+id/tvResult"
-        android:text="0.0 딸/pm"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@android:color/white" >
 
-    <Button
-        android:id="@+id/btnGoToMainMenu"
+    <ImageView
+        android:id="@+id/result_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="처음으로" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true"
+        android:src="@drawable/result_title" />
+    <ImageView
+        android:id="@+id/measure_circle_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:adjustViewBounds="true"
+        android:layout_below="@id/result_title"
+        android:src="@drawable/circle_bg" />
+    
+    <ImageView
+        android:id="@+id/needle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:adjustViewBounds="true"
+        android:layout_alignBottom="@id/measure_circle_bg"
+        android:src="@drawable/needle" />
+    
+    <ImageView
+        android:id="@+id/measure_circle_cover"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:adjustViewBounds="true"
+        android:layout_below="@id/result_title"
+        android:src="@drawable/circle_cover" />
+    <ImageView
+        android:id="@+id/measure_nemo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:adjustViewBounds="true"
+        android:layout_below="@id/measure_circle_cover"
+        android:src="@drawable/measure_nemo" />
+    <ImageView
+        android:id="@+id/measure_nemo_cover"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:adjustViewBounds="true"
+        android:layout_below="@id/measure_circle_cover"
+        android:src="@drawable/nemo_cover" />
+    
+    <Button 
+        android:id="@+id/btnGoToMainMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:adjustViewBounds="true"
+        android:layout_below="@id/measure_nemo_cover"
+        android:text="go to main"/>
 
-</LinearLayout>
+    
+</RelativeLayout>

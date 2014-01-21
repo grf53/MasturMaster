@@ -21,15 +21,31 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int background_timer=0x7f020000;
+        public static final int btn0=0x7f020001;
+        public static final int btn1=0x7f020002;
+        public static final int btn2=0x7f020003;
+        public static final int circle_bg=0x7f020004;
+        public static final int circle_cover=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
+        public static final int measure_nemo=0x7f020007;
+        public static final int needle=0x7f020008;
+        public static final int nemo_cover=0x7f020009;
+        public static final int result_title=0x7f02000a;
     }
     public static final class id {
-        public static final int action_settings=0x7f080013;
+        public static final int action_settings=0x7f080018;
         public static final int btn0=0x7f080000;
         public static final int btn1=0x7f080001;
         public static final int btn2=0x7f080002;
-        public static final int btnGoToMainMenu=0x7f080012;
+        public static final int btnGoToMainMenu=0x7f080017;
         public static final int btnMeasure=0x7f080010;
+        public static final int measure_circle_bg=0x7f080012;
+        public static final int measure_circle_cover=0x7f080014;
+        public static final int measure_nemo=0x7f080015;
+        public static final int measure_nemo_cover=0x7f080016;
+        public static final int needle=0x7f080013;
+        public static final int result_title=0x7f080011;
         public static final int textView0=0x7f080003;
         public static final int textView1=0x7f080004;
         public static final int textView2=0x7f080006;
@@ -41,7 +57,6 @@ public final class R {
         public static final int tvAY=0x7f080007;
         public static final int tvAZ=0x7f080009;
         public static final int tvDPM=0x7f08000f;
-        public static final int tvResult=0x7f080011;
         public static final int tvTime=0x7f08000d;
         public static final int tvTimes=0x7f08000b;
     }

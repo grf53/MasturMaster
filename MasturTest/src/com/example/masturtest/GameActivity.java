@@ -33,7 +33,7 @@ public class GameActivity extends Activity {
 	int[] pastAccel = { 0, 0, 0, 0, 0 };
 	long pastTime = 0, presentTime = 0;
 	int limitTime = 0;
-	String strDPM = "";
+	double DPM = 0;
 
 	PowerManager mPm;
 	WakeLock mWakeLock;
@@ -104,7 +104,7 @@ public class GameActivity extends Activity {
 				
 				Intent tempIntent = new Intent(GameActivity.this, ResultActivity.class);
 				
-				tempIntent.putExtra("ddrpm", strDPM);
+				tempIntent.putExtra("ddrpm", DPM);
 				startActivity(tempIntent);
 				finish();
 			}
@@ -157,7 +157,7 @@ public class GameActivity extends Activity {
 			
 			if(!nowMeasuring)
 			{
-				strDPM = (String) tvDPM.getText();
+				DPM = (60000 * (Times / 2) / ((double) tct.getTime()));
 				measureComplete();
 			}
 		}
