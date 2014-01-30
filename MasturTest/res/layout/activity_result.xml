@@ -1,15 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
+    android:gravity="center"
     android:background="@android:color/white" >
 
     <ImageView
         android:id="@+id/result_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:adjustViewBounds="true"
         android:src="@drawable/result_title" />
@@ -17,8 +15,6 @@
         android:id="@+id/measure_circle_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:adjustViewBounds="true"
         android:layout_below="@id/result_title"
         android:src="@drawable/circle_bg" />
@@ -27,48 +23,41 @@
         android:id="@+id/needle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:adjustViewBounds="true"
         android:layout_alignBottom="@id/measure_circle_bg"
+        android:layout_alignLeft="@id/measure_circle_bg"
+        android:layout_alignRight="@id/measure_circle_bg"
         android:src="@drawable/needle" />
     
     <ImageView
         android:id="@+id/measure_circle_cover"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:adjustViewBounds="true"
         android:layout_below="@id/result_title"
-        android:src="@drawable/circle_cover" />
-    <ImageView
+        android:layout_alignLeft="@id/measure_circle_bg"
+        android:layout_alignRight="@id/measure_circle_bg"
+        android:src="@drawable/circle_cover"/>
+    
+    <com.example.masturtest.ResultScoreView 
         android:id="@+id/measure_nemo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:adjustViewBounds="true"
         android:layout_below="@id/measure_circle_cover"
-        android:src="@drawable/measure_nemo" />
-    <ImageView
-        android:id="@+id/measure_nemo_cover"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:adjustViewBounds="true"
-        android:layout_below="@id/measure_circle_cover"
-        android:src="@drawable/nemo_cover" />
+        android:layout_alignLeft="@id/measure_circle_cover"
+        android:layout_alignRight="@id/measure_circle_cover">
+        
+    </com.example.masturtest.ResultScoreView>
     
     <Button 
         android:id="@+id/btnGoToMainMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignLeft="@id/measure_nemo"
+        android:layout_alignRight="@id/measure_nemo"
         android:adjustViewBounds="true"
-        android:layout_below="@id/measure_nemo_cover"
+        android:layout_below="@id/measure_nemo"
         android:text="go to main"/>
 
     

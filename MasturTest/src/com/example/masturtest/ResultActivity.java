@@ -16,6 +16,7 @@ public class ResultActivity extends Activity {
 
 	Button btnGoToMain = null;
 	ImageView needle = null;
+	ResultScoreView scoreView = null;
 	Animation animation;
 	
 	double DDR = 0;
@@ -34,14 +35,15 @@ public class ResultActivity extends Activity {
 		
 		btnGoToMain = (Button) findViewById(R.id.btnGoToMainMenu);
 		needle = (ImageView) findViewById(R.id.needle);
+		scoreView = (ResultScoreView) findViewById(R.id.measure_nemo);
 		
+		scoreView.setValue((int)DDR);
 
 		Matrix mat = new Matrix();
 		mat.setRotate(rotate);
 		
 		needle.setImageMatrix(mat);
 		
-
 		animation = new RotateAnimation(0, rotate, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
 		animation.setDuration(1300);
 		animation.setFillAfter(true);
