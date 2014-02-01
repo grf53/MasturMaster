@@ -4,35 +4,46 @@ import android.os.AsyncTask;
 
 public class TimeCheckThread extends AsyncTask<Void, Integer, Void> {
 
-	int time;
+	private int limitTime;
 	
-	long pastTime;
-	long currentTime;
+	private long pastTime;
+	private long currentTime;
 	
-	public TimeCheckThread(int time) {
-		
-		this.time = time;
+	private boolean measureDone;
+	
+	public TimeCheckThread(int limitTime) {
+		this.limitTime = limitTime;
+		pastTime = 0;
+		currentTime = 0;
+		measureDone = false;
 	}
 
 	public long getTime() {
-		// TODO Auto-generated method stub
 		return currentTime - pastTime;
+	}
+	
+	public boolean isMeasureDone() {
+		return measureDone;
+	}
+
+	@Override
+	protected void onPreExecute() {
+		super.onPreExecute();
 	}
 
 	@Override
 	protected Void doInBackground(Void... params) {
-
 		currentTime = pastTime = System.currentTimeMillis();
 		
-		while(currentTime - pastTime < time)
+		while(currentTime - pastTime < limitTime)
 			currentTime = System.currentTimeMillis();
 		
 		return null;
 	}
-	
+		
 	@Override
 	protected void onPostExecute(Void result) {
-		
-		GameActivity.nowMeasuring = false;
+		measureDone = true;
+		super.onPostExecute(result);
 	}
 }

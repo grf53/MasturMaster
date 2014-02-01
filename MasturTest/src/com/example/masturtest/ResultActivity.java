@@ -54,9 +54,7 @@ public class ResultActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent tempIntent = new Intent(ResultActivity.this, ChoiceActivity.class);
-				startActivity(tempIntent);
+				startActivity(new Intent(ResultActivity.this, ChoiceActivity.class));
 				finish();
 			}
 		});

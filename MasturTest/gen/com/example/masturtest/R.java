@@ -32,18 +32,19 @@ public final class R {
         public static final int leftbar=0x7f020008;
         public static final int measure_nemo=0x7f020009;
         public static final int needle=0x7f02000a;
-        public static final int num0=0x7f02000b;
-        public static final int num1=0x7f02000c;
-        public static final int num2=0x7f02000d;
-        public static final int num3=0x7f02000e;
-        public static final int num4=0x7f02000f;
-        public static final int num5=0x7f020010;
-        public static final int num6=0x7f020011;
-        public static final int num7=0x7f020012;
-        public static final int num8=0x7f020013;
-        public static final int num9=0x7f020014;
-        public static final int result_title=0x7f020015;
-        public static final int topbar=0x7f020016;
+        public static final int nemo_cover=0x7f02000b;
+        public static final int num0=0x7f02000c;
+        public static final int num1=0x7f02000d;
+        public static final int num2=0x7f02000e;
+        public static final int num3=0x7f02000f;
+        public static final int num4=0x7f020010;
+        public static final int num5=0x7f020011;
+        public static final int num6=0x7f020012;
+        public static final int num7=0x7f020013;
+        public static final int num8=0x7f020014;
+        public static final int num9=0x7f020015;
+        public static final int result_title=0x7f020016;
+        public static final int topbar=0x7f020017;
     }
     public static final class id {
         public static final int action_settings=0x7f080017;
@@ -73,7 +74,7 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_choice=0x7f030000;
-        public static final int activity_main=0x7f030001;
+        public static final int activity_game=0x7f030001;
         public static final int activity_result=0x7f030002;
     }
     public static final class menu {

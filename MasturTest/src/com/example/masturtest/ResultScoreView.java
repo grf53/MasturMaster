@@ -1,9 +1,7 @@
 package com.example.masturtest;
 
-import android.R.string;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
